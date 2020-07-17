@@ -16,13 +16,13 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import java.lang.StringBuilder
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnPlaceClickListener {
 
     private lateinit var search:EditText
     private lateinit var button:Button
     private lateinit var result:TextView
     private lateinit var sBuilder:java.lang.StringBuilder
-    private lateinit var list:ArrayList<String>
+    private lateinit var list:ArrayList<AutocompletePrediction>
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlaceAutoSuggestAdapter
 
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView=findViewById(R.id.recycler_view)
         recyclerView.layoutManager=LinearLayoutManager(applicationContext)
         list=ArrayList()
-        adapter= PlaceAutoSuggestAdapter(list)
+        adapter= PlaceAutoSuggestAdapter(list,this)
         recyclerView.adapter=adapter
 
         val apiKey="AIzaSyD2BU6x8RqFCvHX4BnrIaI0f1ycabOcl2k"
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 sBuilder= StringBuilder()
                  list.clear()
                 for(prediction:AutocompletePrediction in findAutocompletePredictionsResponse.autocompletePredictions){
-                    list.add(prediction.getFullText(null).toString())
+                    list.add(prediction)
                     sBuilder.append(" ").append(prediction.getFullText(null)).toString()+"\n"
                     Toast.makeText(this@MainActivity,"Place ID is"+prediction.getFullText(null),Toast.LENGTH_SHORT).show()
                 }
@@ -90,4 +90,11 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onItemClick(place: AutocompletePrediction, pos: Int) {
+        //TODO("Not yet implemented")
+        Toast.makeText(this,place.getFullText(null),Toast.LENGTH_SHORT).show()
+    }
+
+
 }
